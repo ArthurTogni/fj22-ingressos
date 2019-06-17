@@ -150,4 +150,12 @@
         </plugins>
     </build>
 
+	<developers>
+		<developer>
+			<name>Arthur Togni</name>
+			<email>atognisilva@gmail.com</email>
+		</developer>
+	</developers>
+
+
 </project>
