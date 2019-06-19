@@ -60,5 +60,6 @@ public class LugarController {
 
         return new ModelAndView("redirect:/admin/sala/"+salaId+"/lugares/");
     }
+    
 
 }
