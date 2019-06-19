@@ -20,40 +20,43 @@ public class GerenciadorDeSessao {
 		}
 		return sessoesDaSala.stream().noneMatch(sessaoExistente -> horarioIsConflitante(sessaoExistente, sessaoNova));
 	}
-	
+
 	private boolean terminaAmanha(Sessao sessao) {
-		
+
 		LocalDateTime terminoSessaoNova = getTerminoSessaoComDiaDeHoje(sessao);
 		LocalDateTime ultimoSegundoDeHoje = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-		
+
 		if (terminoSessaoNova.isAfter(ultimoSegundoDeHoje)) {
 			return true;
 		}
 		return false;
-		
-		private boolean horarioIsConflitante(Sessao sessaoExistente, Sessao sessaoNova) {
-			
-			LocalDateTime inicioSessaoExistente = getInicioSessaoComDiaDeHoje(sessaoExistente);
-			LocalDateTime terminoSessaoExistente = getTerminoSessaoComDiaDeHoje(sessaoExistente);
-			LocalDateTime inicioSessaoNova = getInicioSessaoComDiaDeHoje(sessaoNova);
-			LocalDateTime terminoSessaoNova = getTerminoSessaoComDiaDeHoje(sessaoNova);
-			
-			boolean sessaoNovaTerminaAntesDaExistente = terminoSessaoNova.isBefore(inicioSessaoExistente);
-			boolean sessaoNovaComecaDepoisDaExistente = terminoSessaoExistente.isBefore(inicioSessaoNova);
-			
-			if (sessaoNovaTerminaAntesDaExistente || sessaoNovaComecaDepoisDaExistente) {
-				return true;
-				}
-				return false;
+	}
+
+	private boolean horarioIsConflitante(Sessao sessaoExistente, Sessao sessaoNova) {
+
+		LocalDateTime inicioSessaoExistente = getInicioSessaoComDiaDeHoje(sessaoExistente);
+		LocalDateTime terminoSessaoExistente = getTerminoSessaoComDiaDeHoje(sessaoExistente);
+		LocalDateTime inicioSessaoNova = getInicioSessaoComDiaDeHoje(sessaoNova);
+		LocalDateTime terminoSessaoNova = getTerminoSessaoComDiaDeHoje(sessaoNova);
+
+		boolean sessaoNovaTerminaAntesDaExistente = terminoSessaoNova.isBefore(inicioSessaoExistente);
+		boolean sessaoNovaComecaDepoisDaExistente = terminoSessaoExistente.isBefore(inicioSessaoNova);
+
+		if (sessaoNovaTerminaAntesDaExistente || sessaoNovaComecaDepoisDaExistente) {
+			return true;
 		}
+		return false;
+	}
+
+	private LocalDateTime getInicioSessaoComDiaDeHoje(Sessao sessao) {
+		LocalDate hoje = LocalDate.now();
 		
-		private LocalDateTime getInicioSessaoComDiaDeHoje(Sessao sessao) {
-			LocalDate hoje = LocalDate.now();
-		}
-		
-		private LocalDateTime getTerminoSessaoComDiaDeHoje(Sessao sessao) {
-			LocalDateTime inicioSessaoNova = getInicioSessaoComDiaDeHoje(sessao);
-			
-			return inicioSessaoNova.plus(sessao.getFilme().getDuracao());
-			}
+		return sessao.getHorario().atDate(hoje);
+	}
+
+	private LocalDateTime getTerminoSessaoComDiaDeHoje(Sessao sessao) {
+		LocalDateTime inicioSessaoNova = getInicioSessaoComDiaDeHoje(sessao);
+
+		return inicioSessaoNova.plus(sessao.getFilme().getDuracao());
+	}
 }
